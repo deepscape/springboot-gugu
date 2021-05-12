@@ -71,4 +71,16 @@ public class MemoRepositoryTests {
             System.out.println("null");
         }
     }
+
+    @Test
+    public void testUpdate() {
+        Memo memo = Memo.builder().mno(101L).memoText("Update Text").build();
+        System.out.println(memoRepository.save(memo));
+    }
+
+    @Test
+    public void testDelete() {
+        Long mno = 101L;
+        memoRepository.deleteById(mno);
+    }
 }
