@@ -4,6 +4,7 @@ import com.thomas.ex02.entity.Memo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -17,5 +18,8 @@ public interface MemoRepository extends JpaRepository<Memo, Long> {
 
     // Delete Query Method : 메모의 번호가 10보다 작은 데이터를 삭제
     void deleteMemoByMnoLessThan(Long num);
+
+    @Query("select m from Memo m order by m.mno desc")
+    List<Memo> getListDesc();
 
 }

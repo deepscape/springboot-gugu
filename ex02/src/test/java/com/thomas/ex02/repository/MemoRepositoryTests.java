@@ -148,4 +148,11 @@ public class MemoRepositoryTests {
     public void testDeleteQueryMethod() {
         memoRepository.deleteMemoByMnoLessThan(110L);
     }
+
+    // JPQL Test Code
+    @Test
+    public void testGetListDesc() {
+        List<Memo> list = memoRepository.getListDesc();
+        list.forEach(memo -> System.out.println(memo));
+    }
 }
