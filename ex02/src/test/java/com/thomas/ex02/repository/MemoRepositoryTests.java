@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Commit;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -155,4 +156,38 @@ public class MemoRepositoryTests {
         List<Memo> list = memoRepository.getListDesc();
         list.forEach(memo -> System.out.println(memo));
     }
+
+    @Test
+    public void testUpdateMemoText() {
+        int result = memoRepository.updateMemoText(102L, "Update Message");
+        System.out.println("update result : " + result);
+    }
+
+    // @Query 와 페이징 처리 : 180L 보다 크면서 10개까지 가져옴.
+    @Test
+    public void testGetListWithQuery() {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("mno").ascending());
+        Page<Memo> result = memoRepository.getListWithQuery(180L, pageable);
+
+        result.get().forEach(memo -> System.out.println(memo));
+    }
+
+    // @Query 와 Object[] 리턴
+    @Test
+    public void testGetListWithQueryObject() {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("mno").ascending());
+        Page<Object[]> result = memoRepository.getListWithQueryObject(180L, pageable);
+
+        result.get().forEach(i -> System.out.println(Arrays.toString(i)));
+
+    }
+
+    // Native SQL 처리
+    @Test
+    public void testGetNativeResult() {
+        List<Object[]> result = memoRepository.getNativeResult();
+
+        result.forEach(i -> System.out.println(Arrays.toString(i)));
+    }
+
 }
