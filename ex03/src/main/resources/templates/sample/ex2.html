@@ -15,5 +15,39 @@
             [[${state.index}]] --- [[${dto}]]
         </li>
     </ul>
+    <ul>
+        <!-- sno 값이 5의 배수만 출력 -->
+        <li th:each="dto, state : ${list}" th:if="${dto.sno % 5 == 0}">
+            [[${dto}]]
+        </li>
+    </ul>
+    <ul>
+        <!-- sno 가 5로 나눈 나머지가 0 인 경우에는 sno 만 출력, 그렇지 않다면 SampleDTO 의 first 를 출력 -->
+        <li th:each="dto, state : ${list}">
+            <span th:if="${dto.sno % 5 == 0}" th:text="${'--------------------' + dto.sno}"></span>
+            <span th:unless="${dto.sno % 5 == 0}" th:text="${dto.first}"></span>
+        </li>
+    </ul>
+    <ul>
+        <!-- 3항 연산자 (1) -->
+        <li th:each="dto, state : ${list}" th:text="${dto.sno % 5 == 0} ? ${dto.sno}"></li>
+    </ul>
+    <ul>
+        <!-- 3항 연산자 (2) -->
+        <li th:each="dto, state : ${list}" th:text="${dto.sno % 5 == 0} ? ${dto.sno} : ${dto.first}"></li>
+    </ul>
+    <style>
+        .target {
+            background-color: red;
+        }
+    </style>
+    <ul>
+        <li th:each="dto, state : ${list}" th:class="${dto.sno % 5 == 0} ? 'target'" th:text="${dto}"></li>
+    </ul>
+    <ul>
+        <th:block th:each="dto: ${list}">
+            <li th:text="${dto.sno % 5 == 0} ? ${dto.sno} : ${dto.first}"></li>
+        </th:block>
+    </ul>
 </body>
 </html>
