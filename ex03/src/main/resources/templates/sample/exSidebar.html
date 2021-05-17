@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--
+     (1) 아래 content-fragment 를 /layout/basic.html 에 전달
+     (2) basic.html 에 아래 fragment 가 삽입된다.
+     (3) basic.html 의 fragment 를 다시 가져와서 아래에 replace 된다.
+-->
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
+    <th:block th:fragment="content">
+        <h1>exSidebar Page</h1>
+    </th:block>
+</th:block>
+</html>
