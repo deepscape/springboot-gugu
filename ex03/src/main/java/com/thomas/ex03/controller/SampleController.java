@@ -60,7 +60,7 @@ public class SampleController {
     }
 
     // url name 에 해당하는 html 파일과 매핑된다.
-    @GetMapping({"/exLayout1", "/exLayout2"})
+    @GetMapping({"/exLayout1", "/exLayout2", "/exTemplate"})
     public void exLayout1() {
         log.info("exLayout.................");
     }

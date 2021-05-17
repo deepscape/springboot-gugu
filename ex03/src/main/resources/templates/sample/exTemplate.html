@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- 아래 fragment (this::content) 를 layout1.html 의 setContent() 에 파라미터로 전달하라는 의미 -->
+<th:block th:replace="~{/layout/layout1 :: setContent(~{this::content})}">
+    <th:block th:fragment="content">
+        <h1>exTemplate Page</h1>
+    </th:block>
+</th:block>
