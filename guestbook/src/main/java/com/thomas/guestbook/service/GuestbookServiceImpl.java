@@ -31,6 +31,7 @@ public class GuestbookServiceImpl implements GuestbookService {
 
         log.info(entity);
 
+        // DB 에 저장
         repository.save(entity);
 
         return entity.getGno();
@@ -40,6 +41,8 @@ public class GuestbookServiceImpl implements GuestbookService {
     public PageResultDTO<GuestbookDTO, Guestbook> getList(PageRequestDTO requestDTO) {
 
         Pageable pageable = requestDTO.getPageable(Sort.by("gno").descending());
+
+        // DB 에서 pageable 조회조건을 사용해서 Page<Guestbook> 타입의 결과 값을 얻어온다.
         Page<Guestbook> result = repository.findAll(pageable);
 
         // entityToDTO() 를 이용해 lambda TYPE 의 fn 를 생성하고 이를 PageResultDTO<>() 로 전달
