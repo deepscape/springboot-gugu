@@ -29,12 +29,12 @@
             <input type="text" class="form-control" name="modDate" th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly >
         </div>
 
-        <a th:href="@{/guestbook/modify/(gno = ${dto.gno}, page = ${requestDTO.page})}">
+        <a th:href="@{/guestbook/modify/(gno = ${dto.gno},page = ${requestDTO.page},type = ${requestDTO.type},keyword = ${requestDTO.keyword})}">
             <button type="button" class="btn btn-primary">Modify</button>
         </a>
 
         <!-- 목록으로 돌아갈 떄, 기존 페이지로 되돌아가는 것에 주의 -->
-        <a th:href="@{/guestbook/list/(page = ${requestDTO.page})}">
+        <a th:href="@{/guestbook/list/(page = ${requestDTO.page},type = ${requestDTO.type},keyword = ${requestDTO.keyword})}">
             <button type="button" class="btn btn-info">List</button>
         </a>
 

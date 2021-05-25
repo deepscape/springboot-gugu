@@ -1,9 +1,12 @@
 package com.thomas.guestbook.service;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.thomas.guestbook.dto.GuestbookDTO;
 import com.thomas.guestbook.dto.PageRequestDTO;
 import com.thomas.guestbook.dto.PageResultDTO;
 import com.thomas.guestbook.entity.Guestbook;
+import com.thomas.guestbook.entity.QGuestbook;
 import com.thomas.guestbook.repository.GuestbookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -43,8 +46,12 @@ public class GuestbookServiceImpl implements GuestbookService {
 
         Pageable pageable = requestDTO.getPageable(Sort.by("gno").descending());
 
+        // 검색 조건 처리
+        BooleanBuilder booleanBuilder = getSearch(requestDTO);
+
         // DB 에서 pageable 조회조건을 사용해서 Page<Guestbook> 타입의 결과 값을 얻어온다.
-        Page<Guestbook> result = repository.findAll(pageable);
+        // QueryDSL 사용
+        Page<Guestbook> result = repository.findAll(booleanBuilder, pageable);
 
         // entityToDTO() 를 이용해 lambda TYPE 의 fn 를 생성하고 이를 PageResultDTO<>() 로 전달
         Function<Guestbook, GuestbookDTO> fn = (entity -> entityToDto(entity));
@@ -80,4 +87,42 @@ public class GuestbookServiceImpl implements GuestbookService {
             repository.save(entity);
         }
     }
+
+    private BooleanBuilder getSearch(PageRequestDTO requestDTO) {
+
+        String type = requestDTO.getType();
+        String keyword = requestDTO.getKeyword();
+
+        QGuestbook qGuestbook = QGuestbook.guestbook;
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        BooleanExpression expression = qGuestbook.gno.gt(0L);   // gno > 0 조건만 생성
+        booleanBuilder.and(expression);
+
+        if(type == null || type.trim().length() == 0) {
+            return booleanBuilder;
+        }
+
+        // 검색 조건 작성
+        BooleanBuilder conditionBuilder = new BooleanBuilder();
+
+        if(type.contains("t")) {
+            conditionBuilder.or(qGuestbook.title.contains(keyword));
+        }
+
+        if(type.contains("c")) {
+            conditionBuilder.or(qGuestbook.content.contains(keyword));
+        }
+
+        if(type.contains("w")) {
+            conditionBuilder.or(qGuestbook.writer.contains(keyword));
+        }
+
+        // 모든 조건 통합
+        booleanBuilder.and(conditionBuilder);
+
+        return booleanBuilder;
+    }
 }
+
+
