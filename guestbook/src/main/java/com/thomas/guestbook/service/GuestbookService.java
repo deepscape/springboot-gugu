@@ -13,6 +13,9 @@ public interface GuestbookService {
     // 방명록 리스트 가져오기
     PageResultDTO<GuestbookDTO, Guestbook> getList(PageRequestDTO requestDTO);
 
+    // 방명록 조회
+    GuestbookDTO read(Long gno);
+
     default Guestbook dtoToEntity(GuestbookDTO dto) {
         Guestbook entity = Guestbook.builder().gno(dto.getGno())
                                               .title(dto.getTitle())
