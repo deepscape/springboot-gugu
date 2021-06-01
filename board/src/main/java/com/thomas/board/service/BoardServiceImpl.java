@@ -6,11 +6,13 @@ import com.thomas.board.dto.PageResultDTO;
 import com.thomas.board.entity.Board;
 import com.thomas.board.entity.Member;
 import com.thomas.board.repository.BoardRepository;
+import com.thomas.board.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.function.Function;
 
@@ -20,7 +22,9 @@ import java.util.function.Function;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository repository;   // 자동 주입 final
+    private final ReplyRepository replyRepository;
 
+    // 게시물 등록
     @Override
     public Long register(BoardDTO dto) {
         log.info(dto);
@@ -46,6 +50,25 @@ public class BoardServiceImpl implements BoardService {
         Page<Object[]> result = repository.getBoardWithReplyCount(pageRequestDTO.getPageable(Sort.by("bno").descending()));
 
         return new PageResultDTO<>(result, fn);
+    }
+
+    // 게시물 조회 처리
+    @Override
+    public BoardDTO get(Long bno) {
+        Object result = repository.getBoardByBno(bno);
+        Object[] arr = (Object[])result;
+
+        return entityToDTO((Board)arr[0], (Member)arr[1], (Long)arr[2]);
+    }
+
+    // 삭제 기능 구현, 트랜잭션 추가
+    @Transactional
+    @Override
+    public void removeWithReplies(Long bno) {
+        // 댓글부터 삭제
+        replyRepository.deleteByBno(bno);
+
+        repository.deleteById(bno);
     }
 
 }
