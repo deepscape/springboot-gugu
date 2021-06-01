@@ -20,6 +20,9 @@ public interface BoardService {
     // 게시물 삭제
     void removeWithReplies(Long bno);
 
+    // 게시물 수정
+    void modify(BoardDTO boardDTO);
+
     // DTO -> Entity
     default Board dtoToEntity(BoardDTO dto) {
 
