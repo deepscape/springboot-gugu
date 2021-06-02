@@ -50,7 +50,7 @@ public class BoardController {
         - 생성된 오브젝트에 http 로 넘어 온 값들을 자동으로 바인딩
         - @ModelAttribute 어노테이션이 붙은 객체가 자동으로 Model 객체에 추가되고 뷰단으로 전달
      */
-    @GetMapping("/read")
+    @GetMapping({"/read", "/modify"})
     public void read(@ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO, Long bno, Model model) {
         log.info("bno: " + bno);
 
@@ -59,6 +59,31 @@ public class BoardController {
         log.info(boardDTO);
 
         model.addAttribute("dto", boardDTO);
+    }
+
+    @PostMapping("/remove")
+    public String remove(long bno, RedirectAttributes redirectAttributes) {
+        log.info("bno: " + bno);
+
+        boardService.removeWithReplies(bno);
+        redirectAttributes.addFlashAttribute("msg", bno);
+
+        return "redirect:/board/list";
+    }
+
+    @PostMapping("/modify")
+    public String modify(BoardDTO dto, @ModelAttribute("requestDTO") PageRequestDTO requestDTO, RedirectAttributes redirectAttributes) {
+        log.info("post modify...");
+        log.info("dto: " + dto);
+
+        boardService.modify(dto);
+
+        redirectAttributes.addAttribute("page", requestDTO.getPage());
+        redirectAttributes.addAttribute("type", requestDTO.getType());
+        redirectAttributes.addAttribute("keyword", requestDTO.getKeyword());
+        redirectAttributes.addAttribute("bno", dto.getBno());
+
+        return "redirect:/board/read";
     }
 
 }
