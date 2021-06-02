@@ -1,6 +1,7 @@
 package com.thomas.board.repository;
 
 import com.thomas.board.entity.Board;
+import com.thomas.board.repository.search.SearchBoardRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface BoardRepository extends JpaRepository<Board, Long> {
+public interface BoardRepository extends JpaRepository<Board, Long>, SearchBoardRepository {
 
     // 한 개의 로우(Object) 내에 Object[]로 나옴
     // 연관 관계가 있는 엔티티 조인 처리에는 left join 뒤에 on 이 없다.

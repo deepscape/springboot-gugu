@@ -81,4 +81,17 @@ public class BoardRepositoryTests {
         System.out.println(Arrays.toString(arr));
     }
 
+    @Test
+    public void testSearch1() {
+        boardRepository.search1();
+    }
+
+    @Test
+    public void testSearchPage() {
+
+        Pageable pageable = PageRequest.of(0,10,Sort.by("bno").descending());
+
+        // 제목(t)으로 "1"이라는 단어가 있는 데이터를 검색
+        Page<Object[]> result = boardRepository.searchPage("t", "1", pageable);
+    }
 }
