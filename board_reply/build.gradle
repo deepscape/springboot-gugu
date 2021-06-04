@@ -1,0 +1,63 @@
+plugins {
+    id 'org.springframework.boot' version '2.5.0'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'war'
+    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
+}
+
+group = 'com.thomas'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+// https://stackoverflow.com/questions/23796404/could-not-find-method-compile-for-arguments-gradle
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
+    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client'
+    // https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-java8time
+    implementation group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-java8time'
+    implementation 'com.querydsl:querydsl-jpa'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+def querydslDir = "$buildDir/generated/querydsl"
+
+/* Querydsl Q-class 추가 코드 */
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+    main.java.srcDir querydslDir
+}
+
+configurations {
+    querydsl.extendsFrom compileClasspath
+}
+
+// Querydsl 실행 코드
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
