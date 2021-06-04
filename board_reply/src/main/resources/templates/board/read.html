@@ -78,7 +78,7 @@
 
         <script th:inline="javascript">
             $(document).ready(function () {
-                const bno = [[${dto.bno}]]
+                const bno = [[${dto.bno}]];
                 const listGroup = $(".replyList");      // 댓글이 추가될 영역
 
                 // 날짜 처리를 위한 함수
@@ -115,7 +115,7 @@
                 $(".replyCount").click(function() {
                     // $.getJSON("/replies/board/" + bno, function(arr) { console.log(arr); })  // end getJSON
                     loadJSONData();
-                })  // end click
+                });  // end click
 
                 // Modal Show
                 let modal = $(".modal");
@@ -129,7 +129,7 @@
 
                     $(".modal-footer .btn").hide();     // 모달 내의 모든 버튼을 안 보이도록
                     $(".replySave, .replyClose").show();        // 필요한 버튼들만 보이도록
-                })
+                });
 
                 // Reply Save
                 $(".replySave").click(function() {
@@ -137,7 +137,7 @@
                         bno: bno,
                         text: $('input[name="replyText"]').val(),
                         replyer: $('input[name="replyer"]').val()
-                    }
+                    };
                     console.log(reply);
 
                     $.ajax({
@@ -154,9 +154,43 @@
                             modal.modal('hide');
                             loadJSONData();
                         }
-                    })
-                })
-            });
+                    });  // ajax end
+                });  // reply save end
+
+                // Reply delete
+                $('.replyList').on("click", ".card-body", function() {
+                    // data-rno 속성을 이용해 댓글 번호 저장
+                    const rno = $(this).data("rno");
+
+                    // 댓글의 제목과 내용은 CSS 클래스 이용해서 처리
+                    $("input[name='replyText']").val($(this).find('.card-title').html());
+                    $("input[name='replyer']").val($(this).find('.card-subtitle').html());
+                    $("input[name='rno']").val(rno);
+
+                    $(".modal-footer .btn").hide();
+                    $(".replyRemove, .replyModify, .replyClose").show();
+
+                    modal.modal('show');
+                });
+
+                $(".replyRemove").on("click", function() {
+                    const rno = $("input[name='rno']").val();   // 모달창에 보이는 댓글 번호 , hidden
+
+                    $.ajax({
+                        url: '/replies/' + rno,
+                        method: 'delete',
+                        success: function (result) {
+                            console.log("result: " + result);
+                            if(result === 'success') {
+                                alert("댓글이 삭제되었습니다.");
+                                modal.modal('hide');
+                                loadJSONData();
+                            }
+                        }
+                    });     // ajax end
+                });     // click event end
+
+            });     // jQuery end
         </script>
 
     </th:block>

@@ -29,9 +29,16 @@ public class ReplyController {
     @PostMapping("")
     public ResponseEntity<Long> register(@RequestBody ReplyDTO replyDTO) {
         log.info(replyDTO);
-
         Long rno = replyService.register(replyDTO);
 
         return new ResponseEntity<>(rno, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{rno}")
+    public ResponseEntity<String> remove(@PathVariable("rno") Long rno) {
+        log.info("RNO: " + rno);
+        replyService.remove(rno);
+
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 }
