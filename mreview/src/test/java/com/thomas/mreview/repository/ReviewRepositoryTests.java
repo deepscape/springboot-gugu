@@ -6,12 +6,17 @@ import com.thomas.mreview.entity.Review;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.IntStream;
 
 @SpringBootTest
 public class ReviewRepositoryTests {
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Autowired
     private ReviewRepository reviewRepository;
@@ -52,4 +57,18 @@ public class ReviewRepositoryTests {
             System.out.println("-------------------------------------");
         });
     }
+
+    @Commit
+    @Transactional
+    @Test
+    public void testDeleteMember() {
+
+        Long mid = 1L;      // Member 의 mid
+        Member member = Member.builder().mid(mid).build();
+
+        // 순서 주의
+        reviewRepository.deleteByMember(member);
+        memberRepository.deleteById(mid);
+    }
+
 }
