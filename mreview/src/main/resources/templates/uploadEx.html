@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input name="uploadFiles" type="file" multiple />
+<button class="uploadBtn">Upload</button>
+
+<!-- https://www.srihash.org -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+        crossorigin="anonymous"></script>
+
+<script>
+    $('.uploadBtn').click(function() {
+        let formData = new FormData();
+        const inputFile = $("input[type='file']");
+        const files = inputFile[0].files;
+
+        for (let i = 0; i < files.length; i++) {
+            console.log(files[i]);
+            formData.append("uploadFiles", files[i]);
+        }
+    });
+</script>
+
+</body>
+</html>
