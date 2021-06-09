@@ -3,14 +3,19 @@ package com.thomas.mreview.controller;
 import com.thomas.mreview.dto.UploadResultDTO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -82,4 +87,33 @@ public class UploadController {
 
         return folderPath;
     }
+
+    // 업로드 이미지 출력
+    @GetMapping("/display")
+    public ResponseEntity<byte[]> getFile(String fileName) {
+
+        ResponseEntity<byte[]> result = null;
+
+        try {
+            // URL encoding 된 파일 이름을 파라미터로 받아서, 해당 파일을 byte[] 로 만들어서 브라우저로 전송
+            String srcFileName =  URLDecoder.decode(fileName,"UTF-8");
+            log.info("fileName: " + srcFileName);
+
+            File file = new File(uploadPath +File.separator+ srcFileName);
+            log.info("file: " + file);
+
+            // MIME 타입 처리
+            HttpHeaders header = new HttpHeaders();
+            header.add("Content-Type", Files.probeContentType(file.toPath()));
+
+            // 파일 데이터 처리: File -> Byte[]
+            result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return result;
+    }
+
 }
