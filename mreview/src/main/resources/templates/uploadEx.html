@@ -24,12 +24,21 @@
         console.log(arr);
 
         let divArea = $(".uploadResult");
+        let str = "";
 
         for (let i=0; i<arr.length; i++) {
-            divArea.append("<img src='/display?fileName=" + arr[i].imageURL + "'>");
+            // divArea.append("<img src='/display?fileName=" + arr[i].imageURL + "'>");
+            // divArea.append("<img src='/display?fileName=" + arr[i].thumbnailURL + "'>");
+            str += "<div>";
+            str += "<img src='/display?fileName=" + arr[i].thumbnailURL + "'>";
+            str += "<button class='removeBtn' data-name='" + arr[i].imageURL + "'>REMOVE</button>"
+            str += "</div>";
         }
+
+        return divArea.append(str);
     }
 
+    // upload button click
     $('.uploadBtn').on('click', function() {
         let formData = new FormData();
         const inputFile = $("input[type='file']");
@@ -58,6 +67,25 @@
             }
         });  // $.ajax end
     });
+
+    // remove button click
+    $(".uploadResult").on("click", ".removeBtn", function(e) {
+        const target = $(this);
+
+        // data-name = arr[i].imageURL
+        const fileName = target.data("name");
+        const targetDiv = $(this).closest("div");
+
+        console.log(fileName);
+
+        $.post('/removeFile', {fileName : fileName}, function(result) {
+            console.log(result);
+            if(result === true) {
+                targetDiv.remove();
+            }
+        });
+    })
+
 </script>
 
 </body>
