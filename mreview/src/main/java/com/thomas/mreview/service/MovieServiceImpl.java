@@ -29,10 +29,7 @@ public class MovieServiceImpl implements MovieService {
         List<MovieImage> movieImageList = (List<MovieImage>) entityMap.get("imgList");
 
         movieRepository.save(movie);
-
-        movieImageList.forEach(movieImage -> {
-            imageRepository.save(movieImage);
-        });
+        movieImageList.forEach(movieImage -> { imageRepository.save(movieImage); });
 
         return movie.getMno();
     }

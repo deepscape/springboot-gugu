@@ -19,4 +19,5 @@ public class MovieDTO {
 
     @Builder.Default
     private List<MovieImageDTO> imageDTOList = new ArrayList<>();
+
 }
