@@ -60,6 +60,66 @@
         Review Count <span class="badge badge-light">[[${dto.reviewCnt}]]</span>
       </button>
 
+      <!--
+          리뷰를 처리하기 위한 모달창
+          회원 아이디와 별점/리뷰 내용을 입력할 수 있는 태그 존재
+          여러 개의 버튼이 존재하며, 상황에 따라 사라지는 버튼이 있음
+      -->
+      <div class="reviewModal modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Movie Review</h5>
+
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label >Reviewer ID</label>
+                <input type="text" class="form-control" name="mid" >
+              </div>
+              <div class="form-group">
+                <label >Grade <span class="grade"></span></label>
+                <div class='starrr'></div>
+              </div>
+              <div class="form-group">
+                <label >Review Text</label>
+                <input type="text" class="form-control" name="text" placeholder="Good Movie!" >
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary reviewSaveBtn">Save changes</button>
+              <button type="button" class="btn btn-warning modifyBtn">Modify </button>
+              <button type="button" class="btn btn-danger removeBtn">Remove </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 단순히 이미지를 화면에 보여주는 용도 -->
+      <div class="imageModal modal " tabindex="-2" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Picture</h5>
+
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <script>
         $(function (e) {
 
