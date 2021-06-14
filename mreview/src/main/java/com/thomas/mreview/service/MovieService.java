@@ -2,6 +2,8 @@ package com.thomas.mreview.service;
 
 import com.thomas.mreview.dto.MovieDTO;
 import com.thomas.mreview.dto.MovieImageDTO;
+import com.thomas.mreview.dto.PageRequestDTO;
+import com.thomas.mreview.dto.PageResultDTO;
 import com.thomas.mreview.entity.Movie;
 import com.thomas.mreview.entity.MovieImage;
 
@@ -14,6 +16,30 @@ public interface MovieService {
 
     // 영화 등록
     Long register(MovieDTO movieDTO);
+
+    // 영화 목록
+    PageResultDTO<MovieDTO, Object[]> getList(PageRequestDTO requestDTO);
+
+    default MovieDTO entitiesToDTO(Movie movie, List<MovieImage> movieImages, Double avg, Long reviewCnt) {
+        MovieDTO movieDTO = MovieDTO.builder().mno(movie.getMno())
+                                              .title(movie.getTitle())
+                                              .regDate(movie.getRegDate())
+                                              .modDate(movie.getModDate())
+                                              .build();
+
+        List<MovieImageDTO> movieImageDTOList = movieImages.stream().map(movieImage -> {
+            return MovieImageDTO.builder().imgName(movieImage.getImgName())
+                                          .path(movieImage.getPath())
+                                          .uuid(movieImage.getUuid())
+                                          .build();
+        }).collect(Collectors.toList());
+
+        movieDTO.setImageDTOList(movieImageDTOList);
+        movieDTO.setAvg(avg);
+        movieDTO.setReviewCnt(reviewCnt.intValue());
+
+        return movieDTO;
+    }
 
     // Map 타입으로 변환
     default Map<String, Object> dtoToEntity(MovieDTO movieDTO) {

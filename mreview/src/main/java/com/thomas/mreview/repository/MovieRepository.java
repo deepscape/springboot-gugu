@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface MovieRepository extends JpaRepository<Movie, Long> {
 
-    // 영화, 영화 이미지, 평점 평균, 리뷰 수
+    // 목록 처리 : 영화, 영화 이미지, 평점 평균, 리뷰 수
     // max(mi) 의 경우, N+1 문제를 발생시키므로 절대 유의할 것
     @Query("select m, mi, avg(coalesce(r.grade, 0)), count(distinct r) from Movie m " +
            "left join MovieImage mi on mi.movie = m " +
