@@ -24,7 +24,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
             .antMatchers("/sample/all").permitAll()
-            .antMatchers("/sample/member").hasRole("USER");
+            .antMatchers("/sample/member").hasRole("USER")
+            .antMatchers("/sample/admin").hasRole("ADMIN");
 
         // 인가,인증에 문제 발생하면, 로그인 화면
         http.formLogin();
