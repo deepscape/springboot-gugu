@@ -39,6 +39,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 인가,인증에 문제 발생하면, 로그인 화면
         http.formLogin();
 
+        // <form> 태그에서는 CSRF 토큰이 권장 , REST 방식 등에서는 CSRF 토큰을 발행하지 않는 경우도 있다.
+        http.csrf().disable();
+
+        // CSRF 토큰을 사용할 때는 반드시 POST 방식으로만 로그아웃을 처리한다.
+        // CSRF 토큰을 비활성화 시키면 GET ('/logout') 으로도 로그아웃이 처리된다.
+        http.logout();
     }
 
 }
