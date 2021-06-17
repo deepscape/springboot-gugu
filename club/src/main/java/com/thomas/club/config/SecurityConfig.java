@@ -20,16 +20,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-        // 사용자 계정은 user1
-        auth.inMemoryAuthentication().withUser("user1")
-        // 1111 패스워드 인코딩 결과 - 테스트 코드 참고
-        .password("$2a$10$gXklK.tDOEbOtE5zX7.mTuykYZKnPauAVGZcPP0sqU.ch1ACXIx3S")
-        .roles("USER");
-    }
-
-    @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
@@ -46,5 +36,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // CSRF 토큰을 비활성화 시키면 GET ('/logout') 으로도 로그아웃이 처리된다.
         http.logout();
     }
+
+
+/*  UserDetailsService 를 사용하면, 아래 인증에 대한 임시 코드는 필요 없음
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+
+        // 사용자 계정은 user1
+        auth.inMemoryAuthentication().withUser("user1")
+                // 1111 패스워드 인코딩 결과 - 테스트 코드 참고
+                .password("$2a$10$gXklK.tDOEbOtE5zX7.mTuykYZKnPauAVGZcPP0sqU.ch1ACXIx3S")
+                .roles("USER");
+    }
+*/
 
 }

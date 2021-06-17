@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.stream.IntStream;
 
 @SpringBootTest
@@ -33,14 +35,21 @@ public class ClubMemberTests {
                                                         .password(passwordEncoder.encode("1111"))
                                                         .build();
 
-            // default role
+            // role add
             clubMember.addMemberRole(ClubMemberRole.USER);
-
             if (i > 80) { clubMember.addMemberRole(ClubMemberRole.MANAGER); }
             if (i > 90) { clubMember.addMemberRole(ClubMemberRole.ADMIN); }
 
             repository.save(clubMember);
         });
+    }       // insertDummies end
+
+    @Test
+    public void testRead() {
+        Optional<ClubMember> result = repository.findByEmail("user95@thomas.com", false);
+        ClubMember clubMember = result.get();
+
+        System.out.println(clubMember);
     }
 
 }
