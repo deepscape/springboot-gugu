@@ -22,7 +22,7 @@ public class SampleController {
         log.info("exMember..............");
         log.info("----------------------");
 
-        //
+        // 로그인된 사용자 정보를 확인 , @AuthenticationPrincipal
         log.info(clubAuthMemberDTO);
     }
 
