@@ -35,8 +35,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // CSRF 토큰을 사용할 때는 반드시 POST 방식으로만 로그아웃을 처리한다.
         // CSRF 토큰을 비활성화 시키면 GET ('/logout') 으로도 로그아웃이 처리된다.
-        // http.logout();
+        http.logout();
 
+        // google cloud platform  ->  API 및 서비스  ->  사용자 인증 정보
         http.oauth2Login();
     }
 
