@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/sample/")
 public class SampleController {
 
-    // @PreAuthorize("permitAll()")
+    @PreAuthorize("permitAll()")
     @GetMapping("/all")
     public void exAll() {
         log.info("exALL.................");
     }
 
-    // @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/member")
     public void exMember(@AuthenticationPrincipal ClubAuthMemberDTO clubAuthMemberDTO) {
         log.info("exMember..............");
@@ -29,7 +29,7 @@ public class SampleController {
         log.info(clubAuthMemberDTO);
     }
 
-    // @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin")
     public void exAdmin() {
         log.info("exAdmin...............");

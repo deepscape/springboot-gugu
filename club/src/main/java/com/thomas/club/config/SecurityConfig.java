@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @Log4j2
-// @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {      // 별도의 시큐리티 설정 클래스 , 핵심 클래스
 
     // Remember me 설정
@@ -31,10 +31,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {      // 별�
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        /*
         http.authorizeRequests()
             .antMatchers("/sample/all").permitAll()
             .antMatchers("/sample/member").hasRole("USER")
             .antMatchers("/sample/admin").hasRole("ADMIN");
+        */
 
         // 인가,인증에 문제 발생하면, 로그인 화면
         http.formLogin();
@@ -47,10 +49,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {      // 별�
         http.logout();
 
         // google cloud platform  ->  API 및 서비스  ->  사용자 인증 정보
-        // http.oauth2Login().successHandler(successHandler());
+        http.oauth2Login().successHandler(successHandler());
 
         // Remember Me
-        // http.rememberMe().tokenValiditySeconds(60*60*24*7).userDetailsService(userDetailsService);     // 7일
+        http.rememberMe().tokenValiditySeconds(60*60*24*7).userDetailsService(userDetailsService);     // 7일
     }
 
     @Bean
