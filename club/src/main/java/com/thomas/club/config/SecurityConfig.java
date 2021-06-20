@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public ClubLoginSuccessHandler successHandler() {
-        return new ClubLoginSuccessHandler();
+        return new ClubLoginSuccessHandler(passwordEncoder());
     }
 
 
