@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
-import java.util.concurrent.Callable;
 import java.util.stream.IntStream;
 
 @SpringBootTest

@@ -1,10 +1,13 @@
 package com.thomas.club.config;
 
 import com.thomas.club.security.handler.ClubLoginSuccessHandler;
+import com.thomas.club.security.service.ClubUserDetailsService;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,7 +15,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @Log4j2
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+// @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+public class SecurityConfig extends WebSecurityConfigurerAdapter {      // 별도의 시큐리티 설정 클래스 , 핵심 클래스
+
+    // Remember me 설정
+    @Autowired
+    private ClubUserDetailsService userDetailsService;
 
     // 패스워드 암호화
     @Bean
@@ -36,10 +44,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // CSRF 토큰을 사용할 때는 반드시 POST 방식으로만 로그아웃을 처리한다.
         // CSRF 토큰을 비활성화 시키면 GET ('/logout') 으로도 로그아웃이 처리된다.
-        // http.logout();
+        http.logout();
 
         // google cloud platform  ->  API 및 서비스  ->  사용자 인증 정보
-        http.oauth2Login().successHandler(successHandler());
+        // http.oauth2Login().successHandler(successHandler());
+
+        // Remember Me
+        // http.rememberMe().tokenValiditySeconds(60*60*24*7).userDetailsService(userDetailsService);     // 7일
     }
 
     @Bean

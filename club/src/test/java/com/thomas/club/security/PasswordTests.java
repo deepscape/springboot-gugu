@@ -21,4 +21,13 @@ public class PasswordTests {
         System.out.println("matchResult: " + matchResult);
     }
 
+    @Test
+    public void testEncoder2() {
+        String password = "1111";
+        String enPw = "$2a$10$x1XgqJHtADRAVaPMMvLwQu.uk/iT/4.1kkMsqufMhUZHXbJ.wmOZi";
+        System.out.println("enPw: " + enPw);
+
+        boolean matchResult = passwordEncoder.matches(password, enPw);
+        System.out.println("matchResult: " + matchResult);
+    }
 }
