@@ -1,6 +1,7 @@
 package com.thomas.club.config;
 
 import com.thomas.club.security.filter.ApiCheckFilter;
+import com.thomas.club.security.filter.ApiLoginFilter;
 import com.thomas.club.security.handler.ClubLoginSuccessHandler;
 import com.thomas.club.security.service.ClubUserDetailsService;
 import lombok.extern.log4j.Log4j2;
@@ -67,6 +68,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {      // 별�
     @Bean
     public ApiCheckFilter apiCheckFilter() {
         return new ApiCheckFilter("/notes/**/*");
+    }
+
+    @Bean
+    public ApiLoginFilter apiLoginFilter() throws Exception {
+        ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login");
+        apiLoginFilter.setAuthenticationManager(authenticationManager());
+
+        return apiLoginFilter;
     }
 
 /*  UserDetailsService 를 사용하면, 아래 인증에 대한 임시 코드는 필요 없음
