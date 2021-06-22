@@ -1,5 +1,6 @@
 package com.thomas.club.config;
 
+import com.thomas.club.security.filter.ApiCheckFilter;
 import com.thomas.club.security.handler.ClubLoginSuccessHandler;
 import com.thomas.club.security.service.ClubUserDetailsService;
 import lombok.extern.log4j.Log4j2;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @Log4j2
@@ -53,6 +55,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {      // 별�
 
         // Remember Me
         http.rememberMe().tokenValiditySeconds(60*60*24*7).userDetailsService(userDetailsService);     // 7일
+
+        http.addFilterBefore(apiCheckFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
@@ -60,6 +64,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {      // 별�
         return new ClubLoginSuccessHandler(passwordEncoder());
     }
 
+    @Bean
+    public ApiCheckFilter apiCheckFilter() {
+        return new ApiCheckFilter("/notes/**/*");
+    }
 
 /*  UserDetailsService 를 사용하면, 아래 인증에 대한 임시 코드는 필요 없음
     @Override
