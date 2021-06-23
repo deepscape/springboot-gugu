@@ -5,6 +5,7 @@ import com.thomas.club.security.filter.ApiLoginFilter;
 import com.thomas.club.security.handler.ApiLoginFailHandler;
 import com.thomas.club.security.handler.ClubLoginSuccessHandler;
 import com.thomas.club.security.service.ClubUserDetailsService;
+import com.thomas.club.security.util.JWTUtil;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -71,17 +72,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {      // 별�
     // '/notes/..' 로 시작하는 경우에만 동작하도록 설정
     @Bean
     public ApiCheckFilter apiCheckFilter() {
-        return new ApiCheckFilter("/notes/**/*");
+        return new ApiCheckFilter("/notes/**/*", jwtUtil());
     }
 
     @Bean
     public ApiLoginFilter apiLoginFilter() throws Exception {
-        ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login");
+        ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login", jwtUtil());
         apiLoginFilter.setAuthenticationManager(authenticationManager());
 
         apiLoginFilter.setAuthenticationFailureHandler(new ApiLoginFailHandler());
 
         return apiLoginFilter;
+    }
+
+    @Bean
+    public JWTUtil jwtUtil() {
+        return new JWTUtil();
     }
 
 /*  UserDetailsService 를 사용하면, 아래 인증에 대한 임시 코드는 필요 없음

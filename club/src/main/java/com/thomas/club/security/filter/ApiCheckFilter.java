@@ -1,5 +1,6 @@
 package com.thomas.club.security.filter;
 
+import com.thomas.club.security.util.JWTUtil;
 import lombok.extern.log4j.Log4j2;
 import net.minidev.json.JSONObject;
 import org.springframework.util.AntPathMatcher;
@@ -18,10 +19,12 @@ public class ApiCheckFilter extends OncePerRequestFilter {
 
     private AntPathMatcher antPathMatcher;
     private String pattern;
+    private JWTUtil jwtUtil;
 
-    public ApiCheckFilter(String pattern) {
+    public ApiCheckFilter(String pattern, JWTUtil jwtUtil) {
         this.antPathMatcher = new AntPathMatcher();
         this.pattern = pattern;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -52,7 +55,6 @@ public class ApiCheckFilter extends OncePerRequestFilter {
 
                 PrintWriter out = response.getWriter();
                 out.println(json);
-
             }
 
             return;
@@ -62,18 +64,29 @@ public class ApiCheckFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    // Authorization Header 값 검증
+    // Authorization Header 값 검증 , JWT 
     private boolean checkAuthHeader(HttpServletRequest request) {
         boolean checkResult = false;
         String authHeader = request.getHeader("Authorization");
 
-        if (StringUtils.hasText(authHeader)) {
+        if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
             log.info("Authorization exist: " + authHeader);
-            if(authHeader.equals("12345678")) {
+
+            /*if(authHeader.equals("12345678")) {
                 checkResult = true;
+            }*/
+
+            try {
+                String email = jwtUtil.validateAndExtract(authHeader.substring(7));
+                log.info("validate result: " + email);
+                checkResult = email.length() > 0;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
+            return checkResult;
         }
 
-        return checkResult;
+        return false;
     }
 }
