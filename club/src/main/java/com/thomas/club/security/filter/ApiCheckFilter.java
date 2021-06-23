@@ -64,7 +64,7 @@ public class ApiCheckFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    // Authorization Header 값 검증 , JWT 
+    // Authorization Header 값 검증 , JWT
     private boolean checkAuthHeader(HttpServletRequest request) {
         boolean checkResult = false;
         String authHeader = request.getHeader("Authorization");
@@ -90,3 +90,18 @@ public class ApiCheckFilter extends OncePerRequestFilter {
         return false;
     }
 }
+
+
+/*
+    $(".btn").click(function() {
+        beforeSend: function(request) {
+            request.setRequestHeader("Authorization", "Bearer " + jwtValue);
+        },
+        dataType: "json",
+        url: "http://localhost:8080/notes/all",
+        data: {email: 'user95@thomas.com'},
+        success: function(arr) {
+            console.log(arr);
+        }
+    }
+ */
