@@ -2,6 +2,7 @@ package com.thomas.club.config;
 
 import com.thomas.club.security.filter.ApiCheckFilter;
 import com.thomas.club.security.filter.ApiLoginFilter;
+import com.thomas.club.security.handler.ApiLoginFailHandler;
 import com.thomas.club.security.handler.ClubLoginSuccessHandler;
 import com.thomas.club.security.service.ClubUserDetailsService;
 import lombok.extern.log4j.Log4j2;
@@ -57,6 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {      // 별�
         // Remember Me
         http.rememberMe().tokenValiditySeconds(60*60*24*7).userDetailsService(userDetailsService);     // 7일
 
+        // ApiCheckFilter 를 UsernamePasswordAuthenticationFilter 이전에 동작하도록 설정
         http.addFilterBefore(apiCheckFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
@@ -65,6 +67,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {      // 별�
         return new ClubLoginSuccessHandler(passwordEncoder());
     }
 
+    // 기본적으로 가장 마지막 필터로 작동
+    // '/notes/..' 로 시작하는 경우에만 동작하도록 설정
     @Bean
     public ApiCheckFilter apiCheckFilter() {
         return new ApiCheckFilter("/notes/**/*");
@@ -74,6 +78,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {      // 별�
     public ApiLoginFilter apiLoginFilter() throws Exception {
         ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login");
         apiLoginFilter.setAuthenticationManager(authenticationManager());
+
+        apiLoginFilter.setAuthenticationFailureHandler(new ApiLoginFailHandler());
 
         return apiLoginFilter;
     }

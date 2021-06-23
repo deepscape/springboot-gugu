@@ -1,6 +1,7 @@
 package com.thomas.club.security.filter;
 
 import lombok.extern.log4j.Log4j2;
+import net.minidev.json.JSONObject;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -10,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @Log4j2
 public class ApiCheckFilter extends OncePerRequestFilter {
@@ -37,7 +39,20 @@ public class ApiCheckFilter extends OncePerRequestFilter {
 
             if (checkHeader) {
                 filterChain.doFilter(request, response);
-                return;
+            } else {
+                // 403 Error Msg.
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                // json 리턴 및 한글깨짐 수정
+                response.setContentType("application/json; charset=utf-8");
+
+                JSONObject json = new JSONObject();
+                String msg = "FAIL CHECK API TOKEN";
+                json.put("code", "403");
+                json.put("message", msg);
+
+                PrintWriter out = response.getWriter();
+                out.println(json);
+
             }
 
             return;
@@ -47,6 +62,7 @@ public class ApiCheckFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    // Authorization Header 값 검증
     private boolean checkAuthHeader(HttpServletRequest request) {
         boolean checkResult = false;
         String authHeader = request.getHeader("Authorization");
